@@ -4,13 +4,19 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 <h2>Введите ваши данные:</h2>
 <form method="POST" >
     {{  form.hidden_tag() }}
-    <div>
-        {{ form.nickname.label }}
-        {{ form.nickname(size = 32) }}
-    </div>
     <div>
         {{ form.email.label }}
         {{ form.email }}
@@ -22,6 +28,7 @@
     <div>
         {{ form.submit }}
     </div>
+    <button onclick="location.href = '/registration'" class = "reg-button">Зарегистрироваться</button>
 </form>
 {% if form.errors %}
 <ul>

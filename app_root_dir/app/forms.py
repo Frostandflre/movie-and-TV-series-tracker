@@ -7,3 +7,8 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', [DataRequired(), Email()])
     password = StringField('Password', [DataRequired()])
     submit = SubmitField('Подтвердить')
+
+class AuthorizationForm(FlaskForm):
+    email = StringField('Email', [DataRequired(), Email()])
+    password = StringField('Password', [DataRequired()])
+    submit = SubmitField('Войти')
