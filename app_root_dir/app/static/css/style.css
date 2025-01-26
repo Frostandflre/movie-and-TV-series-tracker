@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #372773;
+    color: white;
+    padding: 15px;
+    align-items: center;
+    height: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.logo-name {
+    height: 40px;
+    margin-top: 4px;
+    margin-left: 25px;
+}
+.logo-img {
+    height: 40px;
+}
+.logo-text{
+    margin-left: 40px;
+    margin-top: -40px;
+    font-size: 24px;
+    color: #190F40;
+}
+.auth-button {
+    background-color: #190F40;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-left: 775px;
+    margin-top: 4px;
+}
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+main {
+    padding: 20px;
+    text-align: center;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+}

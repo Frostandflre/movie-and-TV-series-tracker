@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}WatchWise{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <div class = "logo-name">
+                        <a href="/">
+                        <img src="static/img/logo.png" alt="Logo" class="logo-img">
+                        </a>
+                        <p class = "logo-text">WatchWise</p>
+                    </div>
+                </li>
+                <li>
+                    <button onclick="location.href = '/registration'" class = "auth-button">Войти</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>Все права защищены © 2025</p>
+    </footer>
+</body>
+</html>
