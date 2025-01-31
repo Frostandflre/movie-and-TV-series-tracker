@@ -3,5 +3,14 @@
 {% block title %}WatchWise{% endblock %}
 
 {% block content %}
-
+<div class="movie-container">
+{% for movie in popular_movies.results %}
+      <div class="movie">
+          <a href="{{ url_for('main.movie_info_page', movie_id=movie.id) }}">
+            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+            <p>{{ movie.title }}</p>
+          </a>
+      </div>
+{% endfor %}
+</div>
 {% endblock %}

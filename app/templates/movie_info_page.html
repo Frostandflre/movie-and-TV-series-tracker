@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{movie_info.title}}{% endblock %}
+
+{% block content %}
+
+<h1>{{ movie_info.title }} ({{ movie_info.release_date[:4] if movie_info.release_date else "N/A" }})</h1>
+<img src="https://image.tmdb.org/t/p/w500{{ movie_info.poster_path }}" alt="{{movie_info.title}}" class = "movie-info-img">
+<p><strong>Рейтинг:</strong> {{ movie_info.vote_average }} / 10</p>
+<p><strong>Описание:</strong> {{movie_info.overview}}</p>
+<p><strong>Жанры:</strong>
+    {% if movie_info.genres %}
+        {% for genre in movie_info.genres %}
+            {{ genre.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    {% else %}
+        Неизвестно
+    {% endif %}
+</p>
+<p><strong>Продолжительность:</strong> {{movie_info.runtime}} минут</p>
+{% endblock %}
