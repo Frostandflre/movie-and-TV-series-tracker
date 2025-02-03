@@ -3,19 +3,44 @@
 {% block title %}{{movie_info.title}}{% endblock %}
 
 {% block content %}
+<div class = "movie-info-container">
+    <div class = "movie-info-first-column">
+        <h1>{{ movie_info.title }} ({{ movie_info.release_date[:4] if movie_info.release_date else "N/A" }})</h1>
+        <img src="https://image.tmdb.org/t/p/w500{{ movie_info.poster_path }}" alt="{{movie_info.title}}" class = "movie-info-img">
+    </div>
+    <div class = "movie-info-second-column">
+        <h2 class="info-label">Информация</h2>
+        <p><strong>Описание:</strong> {{movie_info.overview}}</p>
+        <p><strong>Жанры:</strong>
+            {% if movie_info.genres %}
+                {% for genre in movie_info.genres %}
+                    {{ genre.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            {% else %}
+                Неизвестно
+            {% endif %}
+        </p>
+        <p><strong>Продолжительность:</strong> {{movie_info.runtime}} минут</p>
+    </div>
+    <div class = "movie-info-third-column">
+        <h2 class = "info-label">Рейтинг</h2>
+        <p><strong>Рейтинг по IMDb:</strong> {{ movie_info.vote_average | round(1) }}/10</p>
+        <p class = "stars">
+            {% set rating = movie_info.vote_average | round(1) %}
+            {% set full_stars = (rating // 2) | int %}
+            {% set half_star = ((rating % 2) >= 1) %}
+            {% set empty_stars = (5 - full_stars - (1 if half_star else 0)) | int %}
 
-<h1>{{ movie_info.title }} ({{ movie_info.release_date[:4] if movie_info.release_date else "N/A" }})</h1>
-<img src="https://image.tmdb.org/t/p/w500{{ movie_info.poster_path }}" alt="{{movie_info.title}}" class = "movie-info-img">
-<p><strong>Рейтинг:</strong> {{ movie_info.vote_average }} / 10</p>
-<p><strong>Описание:</strong> {{movie_info.overview}}</p>
-<p><strong>Жанры:</strong>
-    {% if movie_info.genres %}
-        {% for genre in movie_info.genres %}
-            {{ genre.name }}{% if not loop.last %}, {% endif %}
-        {% endfor %}
-    {% else %}
-        Неизвестно
-    {% endif %}
-</p>
-<p><strong>Продолжительность:</strong> {{movie_info.runtime}} минут</p>
+            {% for _ in range(full_stars) %}
+                ★
+            {% endfor %}
+            {% if half_star %}
+                ☆
+            {% endif %}
+            {% for _ in range(empty_stars) %}
+                ☆
+            {% endfor %}
+        </p>
+    </div>
+</div>
 {% endblock %}

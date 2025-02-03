@@ -15,3 +15,6 @@ def get_movie_info(movie_id): #TODO: что то сделать с тем что
 def get_popular_movies():
     movie = Movie()
     return movie.popular()
+
+if __name__ == "__main__":
+    print(get_movie_info(550))

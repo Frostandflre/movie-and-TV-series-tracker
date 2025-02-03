@@ -1,6 +1,6 @@
 html,body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    background-color: #110b29;
     margin: 0;
     padding: 0;
     display: flex;
@@ -13,7 +13,7 @@ html,body {
 }
 
 footer {
-  background: #333;
+  background: #1c1c1c;
   color: white;
   text-align: center;
   padding: 10px;
@@ -51,7 +51,7 @@ header {
 .auth-button {
     position: absolute;
     background-color: #190F40;
-    color: white;
+    color: #bebebe;
     padding: 10px 20px;
     border: none;
     border-radius: 15px;
@@ -76,10 +76,54 @@ main {
 .alert-error{
     color: red;
 }
+.movie-info-container {
+    display: flex;
+    align-items: flex-start;
+    background-color: #333;
+    color: #bebebe;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
+.movie-info-first-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.movie-info-second-column {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px;
+}
+
+.movie-info-third-column {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px;
+}
+.stars {
+    margin: 0px;
+    font-size: 1.5rem;
+    color: #372773;
+}
 .movie-info-img{
     max-width: 240px;
     max-height: 320px;
+}
+
+.info-label{
+   margin: 10px;
+   background-color: #2a2344;
+   border-radius: 3px;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .movie-container {
@@ -93,7 +137,6 @@ main {
   display: flex;
   flex-direction: column;
   background: #333;
-  color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -107,7 +150,7 @@ main {
 }
 .movie a {
     text-decoration: none;
-    color: #ffffff;
+    color: #bebebe;
 }
 
 .movie a:hover {
