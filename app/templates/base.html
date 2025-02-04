@@ -13,10 +13,20 @@
                 <ul>
                     <li>
                         <div class = "logo-name">
-                            <a href="/">
+                            <a href="/reset_page/main_page">
                                 <img src="/static/img/logo.png" alt="Logo" class="logo-img">
                                 <p class = "logo-text">WatchWise</p>
                             </a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="search-bar">
+                            <form method="GET" onsubmit="window.location='/reset_page/search_movie_page/' + encodeURIComponent(this.query.value); return false;">
+                                <input name = "query" class = "search-input" required>
+                                <button type="submit">
+                                    <img src="/static/img/search-icon.png" alt="search-icon" class="search-icon">
+                                </button>
+                            </form>
                         </div>
                     </li>
                     {% if nickname == "Guest" %}

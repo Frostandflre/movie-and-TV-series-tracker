@@ -3,13 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .forms import RegistrationForm,AuthorizationForm
 from .extensions import database
 from .models import Users
-from .movie_logic import get_movie_info,get_popular_movies
+from .movie_logic import get_movie_info,get_popular_movies,search_movie
 
 main = Blueprint('main', __name__)
-
-@main.route("/start_page")
-def start_page():
-    return render_template('start_page.html')
 
 @main.route("/")
 def main_page():
@@ -21,16 +17,24 @@ def main_page():
     popular_movies = get_popular_movies(session['current_page'])
     return render_template('main_page.html',nickname=nickname,popular_movies=popular_movies,current_page=session['current_page'])
 
-@main.route("/next_page")
-def next_page():
+@main.route("/next_page/<redirect_to>",defaults = {'search_query': None})
+@main.route("/next_page/<redirect_to>/<search_query>")
+def next_page(redirect_to,search_query):
     session['current_page'] += 1
-    return redirect(url_for('main.main_page'))
+    return redirect(url_for(f"main.{redirect_to}",term=search_query))
 
-@main.route("/previous_page")
-def previous_page():
+@main.route("/previous_page/<redirect_to>",defaults = {'search_query': None})
+@main.route("/previous_page/<redirect_to>/<search_query>")
+def previous_page(redirect_to,search_query):
     if session['current_page'] > 1:
         session['current_page'] -= 1
-    return redirect(url_for('main.main_page'))
+    return redirect(url_for(f"main.{redirect_to}",term=search_query))
+
+@main.route("/reset_page/<redirect_to>",defaults = {'search_query': None})
+@main.route("/reset_page/<redirect_to>/<search_query>")
+def reset_page(redirect_to,search_query):
+    session['current_page'] = 1
+    return redirect(url_for(f"main.{redirect_to}",term=search_query))
 
 @main.route("/login",methods=['GET', 'POST'])
 def login_page():
@@ -76,5 +80,12 @@ def registration_page():
 def movie_info_page(movie_id):
     movie_info = get_movie_info(movie_id)
     return render_template("movie_info_page.html", movie_info=movie_info)
+
+@main.route("/search/<term>")
+def search_movie_page(term):
+    if not session.get('current_page'):
+        session['current_page'] = 1
+    search_results = search_movie(term,page=session['current_page'])
+    return render_template("search_results_page.html", search_results=search_results,current_page=session['current_page'],term=term)
 
 

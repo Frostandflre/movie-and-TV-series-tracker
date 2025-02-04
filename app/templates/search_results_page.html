@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="movie-container">
-{% for movie in popular_movies.results %}
+{% for movie in search_results.results %}
       <div class="movie">
           <a href="{{ url_for('main.movie_info_page', movie_id=movie.id) }}">
             <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
@@ -14,8 +14,8 @@
 {% endfor %}
 </div>
 {% if current_page > 1 %}
-<button onclick="location.href = '/previous_page/main_page'"><</button>
+<button onclick="location.href = '/previous_page/search_movie_page/{{term}}'"><</button>
 {% endif %}
 <button>{{ current_page }}</button>
-<button onclick="location.href = '/next_page/main_page'">></button>
+<button onclick="location.href = '/next_page/search_movie_page/{{term}}'">></button>
 {% endblock %}

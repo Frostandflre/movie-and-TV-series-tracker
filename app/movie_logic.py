@@ -16,5 +16,9 @@ def get_popular_movies(page = 1):
     movie = Movie()
     return movie.popular(page=page)
 
+def search_movie(term,page = 1):
+    movie = Movie()
+    return movie.search(term,page = page)
+
 if __name__ == "__main__":
-    print(get_popular_movies(2))
+    print(search_movie("Interception"))

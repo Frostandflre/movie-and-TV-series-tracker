@@ -48,6 +48,39 @@ header {
     font-size: 24px;
     color: #190F40;
 }
+.search-bar {
+    position: absolute;
+    left: 250px;
+    bottom: 10px;
+}
+.search-input {
+    width: 250px;
+    padding: 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: #190F40;
+    color: #bebebe;
+    font-size: 16px;
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.search-icon {
+    position: absolute;
+    top: 0px;
+    height: 30px;
+    bottom: 20px;
+    border-radius: 30px;
+    background-color: #bebebe;
+    margin-left: 5px;
+
+
+}
 .auth-button {
     position: absolute;
     background-color: #190F40;
