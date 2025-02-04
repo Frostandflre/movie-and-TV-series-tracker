@@ -13,11 +13,24 @@ def start_page():
 
 @main.route("/")
 def main_page():
+    if not session.get('current_page'):
+        session['current_page'] = 1
     nickname = "Guest"
     if 'nickname' in request.cookies:
         nickname = request.cookies.get('nickname')
-    popular_movies = get_popular_movies()
-    return render_template('main_page.html',nickname=nickname,popular_movies=popular_movies)
+    popular_movies = get_popular_movies(session['current_page'])
+    return render_template('main_page.html',nickname=nickname,popular_movies=popular_movies,current_page=session['current_page'])
+
+@main.route("/next_page")
+def next_page():
+    session['current_page'] += 1
+    return redirect(url_for('main.main_page'))
+
+@main.route("/previous_page")
+def previous_page():
+    if session['current_page'] > 1:
+        session['current_page'] -= 1
+    return redirect(url_for('main.main_page'))
 
 @main.route("/login",methods=['GET', 'POST'])
 def login_page():

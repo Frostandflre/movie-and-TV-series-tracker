@@ -13,4 +13,9 @@
       </div>
 {% endfor %}
 </div>
+{% if current_page > 1 %}
+<button onclick="location.href = '/previous_page'"><</button>
+{% endif %}
+<button>{{ current_page }}</button>
+<button onclick="location.href = '/next_page'">></button>
 {% endblock %}

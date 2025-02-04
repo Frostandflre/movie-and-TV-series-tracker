@@ -12,9 +12,9 @@ def get_movie_info(movie_id): #TODO: что то сделать с тем что
         return None
     return movie_info
 
-def get_popular_movies():
+def get_popular_movies(page = 1):
     movie = Movie()
-    return movie.popular()
+    return movie.popular(page=page)
 
 if __name__ == "__main__":
-    print(get_movie_info(550))
+    print(get_popular_movies(2))
