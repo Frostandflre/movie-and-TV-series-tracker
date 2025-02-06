@@ -158,7 +158,42 @@ main {
    border-radius: 3px;
    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+.movie-status-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+.movie-status-dropdown-button {
+    padding: 10px;
+    background-color: #372773;
+    color: white;
+    border: none;
+    width: 200px;
+    text-align: centre;
+}
 
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #3f326d;
+    width: 200px;
+    text-align: centre;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-content li {
+    padding: 2px;
+}
+
+.dropdown-content li:hover {
+    background-color: #372773;
+}
 .movie-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

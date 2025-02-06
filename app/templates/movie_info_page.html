@@ -7,6 +7,19 @@
     <div class = "movie-info-first-column">
         <h1>{{ movie_info.title }} ({{ movie_info.release_date[:4] if movie_info.release_date else "N/A" }})</h1>
         <img src="https://image.tmdb.org/t/p/w500{{ movie_info.poster_path }}" alt="{{movie_info.title}}" class = "movie-info-img">
+        <div class = "movie-status-dropdown-container">
+            <button class = "movie-status-dropdown-button" id = "dropdown-button" onclick="ToggleDropdown()">{{ current_status }}</button>
+            <div id = "dropdown-content" class = "dropdown-content">
+                <ul>
+                    <li onclick="SelectStatus(this)">Не просмотрено</li>
+                    <li onclick="SelectStatus(this)">Заброшено</li>
+                    <li onclick="SelectStatus(this)">В планах</li>
+                    <li onclick="SelectStatus(this)">В процессе</li>
+                    <li onclick="SelectStatus(this)">Просмотрено</li>
+                </ul>
+            </div>
+        </div>
+
     </div>
     <div class = "movie-info-second-column">
         <h2 class="info-label">Информация</h2>
@@ -43,4 +56,35 @@
         </p>
     </div>
 </div>
+
+<script>
+        function ToggleDropdown() {
+            var content = document.getElementById("dropdown-content");
+            content.style.display = content.style.display === "block" ? "none" : "block";
+        }
+
+        document.addEventListener("click", function(event) {
+            var content = document.getElementById("dropdown-content");
+            var button = document.getElementById("dropdown-button");
+
+            if (!content.contains(event.target) && !button.contains(event.target)) {
+                content.style.display = "none";
+            }
+        });
+
+        function SelectStatus(element) {
+            var selectedStatus = element.innerText;
+            document.getElementById("dropdown-button").innerText = selectedStatus;
+
+            document.getElementById("dropdown-content").style.display = "none";
+
+            fetch("/save_movie_status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ movie_status: selectedStatus ,movie_id: {{movie_id}}})
+            });
+        }
+</script>
 {% endblock %}

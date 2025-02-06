@@ -1,14 +1,14 @@
-from flask import render_template, redirect,url_for,Blueprint,session,flash,make_response,request
+from flask import render_template, redirect,url_for,Blueprint,session,flash,make_response,request,jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from .forms import RegistrationForm,AuthorizationForm
 from .extensions import database
-from .models import Users
+from .models import Users, MovieStatus
 from .movie_logic import get_movie_info,get_popular_movies,search_movie
 
 main = Blueprint('main', __name__)
 
 @main.route("/")
-def main_page():
+def main_page(): # TODO: исправить проблему с маштабируемостью
     if not session.get('current_page'):
         session['current_page'] = 1
     nickname = "Guest"
@@ -37,7 +37,7 @@ def reset_page(redirect_to,search_query):
     return redirect(url_for(f"main.{redirect_to}",term=search_query))
 
 @main.route("/login",methods=['GET', 'POST'])
-def login_page():
+def login_page(): # TODO: обновить дизайн
     nickname = "Guest"
     if 'nickname' in request.cookies:
         nickname = request.cookies.get('nickname')
@@ -48,8 +48,10 @@ def login_page():
         user = Users.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
             nickname = user.nickname
+            user_id = str(user.user_id)
             response = make_response(redirect(url_for('main.main_page')))
             response.set_cookie('nickname', nickname,max_age=60*60*24*30, secure=True, httponly=True,)
+            response.set_cookie('user_id', user_id, max_age=60*60*24*30, secure=True, httponly=True, )
             return response
         else:
             flash("Неправильный email или пароль!","error")
@@ -60,10 +62,11 @@ def login_page():
 def logout_page():
     response = make_response(redirect(url_for('main.main_page')))
     response.set_cookie('nickname', '', expires=0)
+    response.set_cookie('user_id', '', expires=0)
     return response
 
 @main.route("/registration",methods=['GET', 'POST'])
-def registration_page():
+def registration_page(): # TODO: обновить дизайн
     nickname = "Guest"
     if 'nickname' in request.cookies:
         nickname = request.cookies.get('nickname')
@@ -72,14 +75,41 @@ def registration_page():
         user = Users(nickname=form.nickname.data,password=generate_password_hash(form.password.data,salt_length=128), email=form.email.data)
         database.session.add(user)
         database.session.commit()
-        session['user_id'] = user.user_id
         return redirect(url_for("main.main_page"))
     return render_template("registration_page.html",form=form,nickname=nickname)
 
 @main.route("/movie_info/<movie_id>")
 def movie_info_page(movie_id):
+    nickname = "Guest"
+    if 'nickname' in request.cookies:
+        nickname = request.cookies.get('nickname')
+    user_id = request.cookies.get('user_id')
+    current_status = MovieStatus.query.filter_by(user_id=user_id, movie_id=movie_id).first().status if user_id else "Не просмотрено"
     movie_info = get_movie_info(movie_id)
-    return render_template("movie_info_page.html", movie_info=movie_info)
+    return render_template("movie_info_page.html",nickname=nickname,movie_info=movie_info,movie_id=movie_id,current_status=current_status)
+
+@main.route("/save_movie_status", methods=["POST"])
+def save_movie_status():
+    data = request.get_json()
+    user_id = request.cookies.get('user_id')
+
+    if not user_id:
+        return jsonify({"error": "Пользователь не авторизован"}), 401
+
+    movie_id = str(data.get("movie_id"))
+    status = data.get("movie_status")
+
+    existing_status = MovieStatus.query.filter_by(user_id=user_id, movie_id=movie_id).first()
+
+    if not existing_status:
+        status = MovieStatus(user_id=user_id, movie_id=movie_id, status= status)
+        database.session.add(status)
+    else:
+        existing_status.status = status
+
+    database.session.commit()
+
+    return jsonify({"message": "Выбор сохранен", "movie_status": data.get("movie_status"), "movie_id": data.get("movie_id")})
 
 @main.route("/search/<term>")
 def search_movie_page(term):
