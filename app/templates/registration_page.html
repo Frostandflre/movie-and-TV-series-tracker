@@ -3,26 +3,28 @@
 {% block title %}WatchWise{% endblock %}
 
 {% block content %}
+<div class="form">
+    <h2>Введите ваши данные:</h2>
+    <form method="POST" >
+        {{  form.hidden_tag() }}
 
-<h2>Введите ваши данные:</h2>
-<form method="POST" >
-    {{  form.hidden_tag() }}
-    <div>
+
         {{ form.nickname.label }}
-        {{ form.nickname(size = 32) }}
-    </div>
-    <div>
+        <div>{{ form.nickname(size = 32,class_="form-field") }}</div>
+
+
         {{ form.email.label }}
-        {{ form.email }}
-    </div>
-    <div>
+        <div>{{ form.email(class_="form-field") }}</div>
+
+
         {{ form.password.label }}
-        {{ form.password(size = 32) }}
-    </div>
-    <div>
-        {{ form.submit }}
-    </div>
-</form>
+        <div>{{ form.password(size = 32,class_="form-field") }}</div>
+
+        {{ form.submit(class_="submit-button") }}
+
+    </form>
+</div>
+
 {% if form.errors %}
 <ul>
     {% for field,errors in form.errors.items() %}

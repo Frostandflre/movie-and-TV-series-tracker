@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}WatchWise{% endblock %}
+
+{% block content %}
+
+<div class="movie-list-container">
+
+<h1>Просматриваемые фильмы</h1>
+{% if in_process_movie_list and in_process_movie_list|length > 0 %}
+    {% for movie in in_process_movie_list %}
+          <div class="movie-in-movie-list">
+              <a href="{{ url_for('main.movie_info_page', movie_id=movie.movie_id) }}">
+                <p>{{ movie.movie_title }}</p>
+              </a>
+          </div>
+    {% endfor %}
+{% else %}
+    <p>Вы еще не просматриваете ни один фильм</p>
+{% endif %}
+
+<h1>Запланированные фильмы</h1>
+{% if planned_movie_list and planned_movie_list|length > 0 %}
+    {% for movie in planned_movie_list %}
+          <div class="movie-in-movie-list">
+              <a href="{{ url_for('main.movie_info_page', movie_id=movie.movie_id) }}">
+                <p>{{ movie.movie_title }}</p>
+              </a>
+          </div>
+    {% endfor %}
+{% else %}
+    <p>Вы еще не запланировали просмотр ни одного фильма</p>
+{% endif %}
+
+<h1>Просмотренные фильмы</h1>
+{% if watched_movie_list and watched_movie_list|length > 0 %}
+    {% for movie in watched_movie_list %}
+          <div class="movie-in-movie-list">
+              <a href="{{ url_for('main.movie_info_page', movie_id=movie.movie_id) }}">
+                <p>{{ movie.movie_title }}</p>
+              </a>
+          </div>
+    {% endfor %}
+{% else %}
+    <p>Вы еще не посмотрели ни один фильм</p>
+{% endif %}
+
+<h1>Брошенные фильмы</h1>
+{% if dropped_movie_list and dropped_movie_list|length > 0 %}
+    {% for movie in dropped_movie_list %}
+          <div class="movie-in-movie-list">
+              <a href="{{ url_for('main.movie_info_page', movie_id=movie.movie_id) }}">
+                <p>{{ movie.movie_title }}</p>
+              </a>
+          </div>
+    {% endfor %}
+{% else %}
+    <p>Вы еще не бросили ни один фильм</p>
+{% endif %}
+</div>
+{% endblock %}

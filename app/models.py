@@ -11,4 +11,6 @@ class MovieStatus(database.Model):
     id = database.Column(database.Integer, primary_key=True)
     user_id = database.Column(database.Integer, database.ForeignKey("users.user_id"), nullable=False)
     movie_id = database.Column(database.String(64), nullable=False)
+    movie_title = database.Column(database.String(256), nullable=True)
     status = database.Column(database.String(20), nullable=False)
+    watched_date = database.Column(database.DateTime, nullable=True)

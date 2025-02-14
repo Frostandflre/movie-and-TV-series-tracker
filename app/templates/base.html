@@ -24,18 +24,21 @@
                             <form method="GET" onsubmit="window.location='/reset_page/search_movie_page/' + encodeURIComponent(this.query.value); return false;">
                                 <input name = "query" class = "search-input" required>
                                 <button type="submit">
-                                    <img src="/static/img/search-icon.png" alt="search-icon" class="search-icon">
+                                    <img src="{{ url_for('static', filename='img/search-icon.png') }}" alt="search-icon" class="search-icon">
                                 </button>
                             </form>
                         </div>
                     </li>
                     {% if nickname == "Guest" %}
                         <li>
-                            <button onclick="location.href = '/login'" class = "auth-button">Войти</button>
+                            <button onclick="location.href = '/login'" class = "login-button">Войти</button>
                         </li>
                     {% else %}
                         <li>
-                            <button onclick="location.href = '/logout'" class = "auth-button">Выйти</button>
+                            <button onclick="location.href = '/logout'" class = "logout-button">Выйти</button>
+                            <a href = "{{ url_for('main.profile_page') }}">
+                                <img src="{{ url_for('static', filename='img/unauthorized_user.png') }}" alt = "user-avatar" class = "profile-icon-img">
+                            </a>
                         </li>
                     {% endif %}
                 </ul>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}WatchWise{% endblock %}
+
+{% block content %}
+<div class = "profile-container">
+    <div class = "profile-first-column">
+        <h1>{{ user_data.nickname }}</h1>
+        <img src = "/static/img/unauthorized_user.png" alt = "user-avatar" class = "profile-img">
+    </div>
+    <div class = "profile-second-column">
+        <a href = "{{ url_for('main.movie_list_page') }}">
+            <ul>
+                {% for status,count in movie_statuses %}
+                    <li>{{ status }} : {{ count }}</li>
+                {% endfor %}
+            </ul>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -81,7 +81,7 @@ header {
 
 
 }
-.auth-button {
+.login-button {
     position: absolute;
     background-color: #190F40;
     color: #bebebe;
@@ -92,6 +92,27 @@ header {
     right: 20px;
     bottom: 8px;
 
+}
+
+.logout-button {
+    position: absolute;
+    background-color: #190F40;
+    color: #bebebe;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    right: 65px;
+    bottom: 8px;
+
+}
+
+.profile-icon-img {
+    position: absolute;
+    width: 35px;
+    border-radius: 50%;
+    right: 20px;
+    bottom: 8px;
 }
 nav ul {
     list-style-type: none;
@@ -165,7 +186,7 @@ main {
 .movie-status-dropdown-button {
     padding: 10px;
     background-color: #372773;
-    color: white;
+    color: #bebebe;
     border: none;
     width: 200px;
     text-align: centre;
@@ -225,4 +246,106 @@ main {
     color: #5e26bf;
 }
 
+.profile-container {
+    display: flex;
+    align-items: flex-start;
+    color: #bebebe;
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
+.profile-first-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+}
+
+.profile-img {
+    width: 150px;
+    height: 250px;
+    border-radius: 20px;
+}
+
+.profile-second-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+}
+
+.movie-list-container {
+    color: #bebebe;
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.movie-in-movie-list {
+    display: flex;
+    align-items: flex-start;
+    border: 10px;
+    border-radius: 10px;
+    background-color: #1a1332;
+    margin-top: 5px;
+}
+
+.movie-in-movie-list a {
+    color: #bebebe;
+    text-align: centre;
+    width: 100%;
+    text-decoration: none;}
+
+.movie-in-movie-list a:hover {
+    color: #5e26bf;
+}
+
+.form {
+    position: absolute;
+    top: 15%;
+    right: 33%;
+    background-color: #333;
+    color: #bebebe;
+    padding: 10px;
+    border-radius: 10px;
+    width: 500px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-field {
+    width: 250px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: #fff;
+    color: #bebebe;
+    font-size: 16px;
+}
+
+.submit-button {
+    background-color: #190f40;
+    color: #bebebe;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.reg-button {
+    background-color: #190f40;
+    color: #bebebe;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}

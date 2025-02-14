@@ -5,6 +5,7 @@ from .extensions import database
 from .models import Users, MovieStatus
 from .movie_logic import get_movie_info,get_popular_movies,search_movie
 
+
 main = Blueprint('main', __name__)
 
 @main.route("/")
@@ -37,7 +38,7 @@ def reset_page(redirect_to,search_query):
     return redirect(url_for(f"main.{redirect_to}",term=search_query))
 
 @main.route("/login",methods=['GET', 'POST'])
-def login_page(): # TODO: обновить дизайн
+def login_page():
     nickname = "Guest"
     if 'nickname' in request.cookies:
         nickname = request.cookies.get('nickname')
@@ -66,7 +67,7 @@ def logout_page():
     return response
 
 @main.route("/registration",methods=['GET', 'POST'])
-def registration_page(): # TODO: обновить дизайн
+def registration_page():
     nickname = "Guest"
     if 'nickname' in request.cookies:
         nickname = request.cookies.get('nickname')
@@ -75,41 +76,61 @@ def registration_page(): # TODO: обновить дизайн
         user = Users(nickname=form.nickname.data,password=generate_password_hash(form.password.data,salt_length=128), email=form.email.data)
         database.session.add(user)
         database.session.commit()
-        return redirect(url_for("main.main_page"))
+        nickname = user.nickname
+        user_id = str(user.user_id)
+        response = make_response(redirect(url_for('main.main_page')))
+        response.set_cookie('nickname', nickname, max_age=60 * 60 * 24 * 30, secure=True, httponly=True, )
+        response.set_cookie('user_id', user_id, max_age=60 * 60 * 24 * 30, secure=True, httponly=True, )
+        return response
     return render_template("registration_page.html",form=form,nickname=nickname)
 
 @main.route("/movie_info/<movie_id>")
-def movie_info_page(movie_id):
+def movie_info_page(movie_id):# TODO: исправить ошибку со статусом "Не просмотрено"
     nickname = "Guest"
     if 'nickname' in request.cookies:
         nickname = request.cookies.get('nickname')
     user_id = request.cookies.get('user_id')
-    current_status = MovieStatus.query.filter_by(user_id=user_id, movie_id=movie_id).first().status if user_id else "Не просмотрено"
+    current_status = "Не просмотрено"
+    if user_id:
+        database_status = MovieStatus.query.filter_by(user_id=user_id, movie_id=movie_id).first()
+        if database_status :
+            current_status = database_status.status
     movie_info = get_movie_info(movie_id)
     return render_template("movie_info_page.html",nickname=nickname,movie_info=movie_info,movie_id=movie_id,current_status=current_status)
 
 @main.route("/save_movie_status", methods=["POST"])
 def save_movie_status():
     data = request.get_json()
+
+    status = data.get("movie_status")
     user_id = request.cookies.get('user_id')
+    movie_id = str(data.get("movie_id"))
+    movie_title = data.get("movie_title")
 
     if not user_id:
         return jsonify({"error": "Пользователь не авторизован"}), 401
 
-    movie_id = str(data.get("movie_id"))
-    status = data.get("movie_status")
+    if not status or not movie_id or not movie_title:
+        return jsonify({"error": "Некорректные данные"}), 400
+
 
     existing_status = MovieStatus.query.filter_by(user_id=user_id, movie_id=movie_id).first()
 
+    if status == "Не просмотрено":
+        if existing_status:
+            database.session.delete(existing_status)
+            database.session.commit()
+        return jsonify({"message": "Фильм удалён из базы данных", "movie_status": status, "movie_id": movie_id,"movie_title": movie_title})
+
     if not existing_status:
-        status = MovieStatus(user_id=user_id, movie_id=movie_id, status= status)
+        status = MovieStatus(user_id=user_id, movie_id=movie_id, status= status,movie_title=movie_title)
         database.session.add(status)
     else:
         existing_status.status = status
 
     database.session.commit()
 
-    return jsonify({"message": "Выбор сохранен", "movie_status": data.get("movie_status"), "movie_id": data.get("movie_id")})
+    return jsonify({"message": "Выбор сохранен", "movie_status": status, "movie_id": movie_id,"movie_title": movie_title})
 
 @main.route("/search/<term>")
 def search_movie_page(term):
@@ -117,5 +138,31 @@ def search_movie_page(term):
         session['current_page'] = 1
     search_results = search_movie(term,page=session['current_page'])
     return render_template("search_results_page.html", search_results=search_results,current_page=session['current_page'],term=term)
+
+@main.route("/profile")
+def profile_page():# TODO: доделать дизайн
+    user_id = request.cookies.get('user_id')
+    movie_statuses = [
+        ("Всего",MovieStatus.query.filter_by(user_id=user_id).count()),
+        ("Просмотрено",MovieStatus.query.filter_by(user_id=user_id,status = "Просмотрено").count()),
+        ("В процессе", MovieStatus.query.filter_by(user_id=user_id, status="В процессе").count()),
+        ("В планах", MovieStatus.query.filter_by(user_id=user_id, status="В планах").count()),
+        ("Брошено", MovieStatus.query.filter_by(user_id=user_id, status="Заброшено").count())
+    ]
+    user_data = {"nickname": Users.query.filter_by(user_id=user_id).first().nickname,
+                 }
+    return render_template("profile_page.html",user_data=user_data,movie_statuses=movie_statuses)
+
+@main.route("/profile/movie_list")
+def movie_list_page():
+    user_id = request.cookies.get('user_id')
+    in_process_movie_list = MovieStatus.query.filter_by(user_id=user_id,status="В процессе").all()
+    planned_movie_list = MovieStatus.query.filter_by(user_id=user_id,status="В планах").all()
+    watched_movie_list = MovieStatus.query.filter_by(user_id=user_id,status="Просмотрено").all()
+    dropped_movie_list = MovieStatus.query.filter_by(user_id=user_id,status="Заброшено").all()
+    return render_template("movie_list_page.html", watched_movie_list=watched_movie_list,planned_movie_list=planned_movie_list,dropped_movie_list=dropped_movie_list,in_process_movie_list=in_process_movie_list)
+
+
+
 
 

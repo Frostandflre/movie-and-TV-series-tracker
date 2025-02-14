@@ -11,11 +11,11 @@
             <button class = "movie-status-dropdown-button" id = "dropdown-button" onclick="ToggleDropdown()">{{ current_status }}</button>
             <div id = "dropdown-content" class = "dropdown-content">
                 <ul>
-                    <li onclick="SelectStatus(this)">Не просмотрено</li>
-                    <li onclick="SelectStatus(this)">Заброшено</li>
-                    <li onclick="SelectStatus(this)">В планах</li>
-                    <li onclick="SelectStatus(this)">В процессе</li>
-                    <li onclick="SelectStatus(this)">Просмотрено</li>
+                    {% for status in ["Не просмотрено","Заброшено","В планах","В процессе","Просмотрено"] %}
+                        {% if status != current_status %}
+                            <li onclick="SelectStatus(this)">{{ status }}</li>
+                        {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
         </div>
@@ -83,7 +83,11 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ movie_status: selectedStatus ,movie_id: {{movie_id}}})
+                body: JSON.stringify({
+                    movie_status: selectedStatus ,
+                    movie_id: {{ movie_id | tojson }},
+                    movie_title: {{ movie_info.title | tojson }}
+                })
             });
         }
 </script>
