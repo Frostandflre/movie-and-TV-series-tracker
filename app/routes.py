@@ -1,10 +1,10 @@
 from flask import render_template, redirect,url_for,Blueprint,session,flash,make_response,request,jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from .forms import RegistrationForm,AuthorizationForm
+from .forms import RegistrationForm,AuthorizationForm,CommentForm
 from .extensions import database
-from .models import Users, MovieStatus
+from .models import Users, MovieStatus,Comments
 from .movie_logic import get_movie_info,get_popular_movies,search_movie
-
+from datetime import datetime
 
 main = Blueprint('main', __name__)
 
@@ -84,7 +84,7 @@ def registration_page():
         return response
     return render_template("registration_page.html",form=form,nickname=nickname)
 
-@main.route("/movie_info/<movie_id>")
+@main.route("/movie_info/<movie_id>",methods=['GET','POST'])
 def movie_info_page(movie_id):# TODO: исправить ошибку со статусом "Не просмотрено"
     nickname = "Guest"
     if 'nickname' in request.cookies:
@@ -96,7 +96,24 @@ def movie_info_page(movie_id):# TODO: исправить ошибку со ст�
         if database_status :
             current_status = database_status.status
     movie_info = get_movie_info(movie_id)
-    return render_template("movie_info_page.html",nickname=nickname,movie_info=movie_info,movie_id=movie_id,current_status=current_status)
+    movie_comments = Comments.query.filter_by(movie_id=movie_id).all()
+
+    form = CommentForm()
+    if form.validate_on_submit():
+        if not user_id:
+            return jsonify({"error": "Пользователь не авторизован"}), 401
+
+        comment_text = form.comment.data
+        if not comment_text:
+            return jsonify({"error": "Некорректные данные"}), 400
+
+        comment = Comments(text=comment_text,author_nickname=nickname,user_id=user_id,movie_id=movie_id)
+
+        database.session.add(comment)
+        database.session.commit()
+        return redirect(url_for("main.movie_info_page",movie_id=movie_id))
+
+    return render_template("movie_info_page.html",nickname=nickname,movie_info=movie_info,movie_id=movie_id,current_status=current_status,form=form,movie_comments=movie_comments)
 
 @main.route("/save_movie_status", methods=["POST"])
 def save_movie_status():

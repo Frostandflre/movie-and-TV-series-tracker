@@ -4,56 +4,83 @@
 
 {% block content %}
 <div class = "movie-info-container">
-    <div class = "movie-info-first-column">
-        <h1>{{ movie_info.title }} ({{ movie_info.release_date[:4] if movie_info.release_date else "N/A" }})</h1>
-        <img src="https://image.tmdb.org/t/p/w500{{ movie_info.poster_path }}" alt="{{movie_info.title}}" class = "movie-info-img">
-        <div class = "movie-status-dropdown-container">
-            <button class = "movie-status-dropdown-button" id = "dropdown-button" onclick="ToggleDropdown()">{{ current_status }}</button>
-            <div id = "dropdown-content" class = "dropdown-content">
-                <ul>
-                    {% for status in ["Не просмотрено","Заброшено","В планах","В процессе","Просмотрено"] %}
-                        {% if status != current_status %}
-                            <li onclick="SelectStatus(this)">{{ status }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
+    <div class = "movie-info-container-row">
+        <div class = "movie-info-first-column">
+            <h1>{{ movie_info.title }} ({{ movie_info.release_date[:4] if movie_info.release_date else "N/A" }})</h1>
+            <img src="https://image.tmdb.org/t/p/w500{{ movie_info.poster_path }}" alt="{{movie_info.title}}" class = "movie-info-img">
+            <div class = "movie-status-dropdown-container">
+                <button class = "movie-status-dropdown-button" id = "dropdown-button" onclick="ToggleDropdown()">{{ current_status }}</button>
+                <div id = "dropdown-content" class = "dropdown-content">
+                    <ul>
+                        {% for status in ["Не просмотрено","Заброшено","В планах","В процессе","Просмотрено"] %}
+                            {% if status != current_status %}
+                                <li onclick="SelectStatus(this)">{{ status }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
+        <div class = "movie-info-second-column">
+            <h2 class="info-label">Информация</h2>
+            <p><strong>Описание:</strong> {{movie_info.overview}}</p>
+            <p><strong>Жанры:</strong>
+                {% if movie_info.genres %}
+                    {% for genre in movie_info.genres %}
+                        {{ genre.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    Неизвестно
+                {% endif %}
+            </p>
+            <p><strong>Продолжительность:</strong> {{movie_info.runtime}} минут</p>
+        </div>
+        <div class = "movie-info-third-column">
+            <h2 class = "info-label">Рейтинг</h2>
+            <p><strong>Рейтинг по IMDb:</strong> {{ movie_info.vote_average | round(1) }}/10</p>
+            <p class = "stars">
+                {% set rating = movie_info.vote_average | round(1) %}
+                {% set full_stars = (rating // 2) | int %}
+                {% set half_star = ((rating % 2) >= 1) %}
+                {% set empty_stars = (5 - full_stars - (1 if half_star else 0)) | int %}
 
-    </div>
-    <div class = "movie-info-second-column">
-        <h2 class="info-label">Информация</h2>
-        <p><strong>Описание:</strong> {{movie_info.overview}}</p>
-        <p><strong>Жанры:</strong>
-            {% if movie_info.genres %}
-                {% for genre in movie_info.genres %}
-                    {{ genre.name }}{% if not loop.last %}, {% endif %}
+                {% for _ in range(full_stars) %}
+                    ★
                 {% endfor %}
-            {% else %}
-                Неизвестно
-            {% endif %}
-        </p>
-        <p><strong>Продолжительность:</strong> {{movie_info.runtime}} минут</p>
+                {% if half_star %}
+                    ☆
+                {% endif %}
+                {% for _ in range(empty_stars) %}
+                    ☆
+                {% endfor %}
+            </p>
+        </div>
     </div>
-    <div class = "movie-info-third-column">
-        <h2 class = "info-label">Рейтинг</h2>
-        <p><strong>Рейтинг по IMDb:</strong> {{ movie_info.vote_average | round(1) }}/10</p>
-        <p class = "stars">
-            {% set rating = movie_info.vote_average | round(1) %}
-            {% set full_stars = (rating // 2) | int %}
-            {% set half_star = ((rating % 2) >= 1) %}
-            {% set empty_stars = (5 - full_stars - (1 if half_star else 0)) | int %}
+    <div class = "movie-info-container-row">
+        <div class = "movie-info-first-column">
+            <div class = "comments">
+                <h2>Комментарии</h2>
+                {% if movie_comments %}
+                    {% for comment in movie_comments %}
+                        <div class="comment">
+                            <p class="comment-author">Автор: {{ comment.author_nickname }}</p>
+                            <p class="comment-date">Дата: {{ comment.publication_date }}</p>
+                            <p class="comment-text">{{ comment.text }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Нет комментариев</p>
+                {% endif %}
+                <form method="POST" >
+                    {{  form.hidden_tag() }}
 
-            {% for _ in range(full_stars) %}
-                ★
-            {% endfor %}
-            {% if half_star %}
-                ☆
-            {% endif %}
-            {% for _ in range(empty_stars) %}
-                ☆
-            {% endfor %}
-        </p>
+                    {{ form.comment(size = 256,class_="comment-field") }}
+
+
+                    {{ form.submit(class_="submit-button") }}
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

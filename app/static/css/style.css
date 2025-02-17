@@ -131,13 +131,16 @@ main {
     color: red;
 }
 .movie-info-container {
-    display: flex;
-    align-items: flex-start;
     background-color: #333;
-    color: #bebebe;
-    padding: 10px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.movie-info-container-row {
+    display: flex;
+    align-items: flex-start;
+    color: #bebebe;
+    padding: 10px;
 }
 
 .movie-info-first-column {
@@ -348,4 +351,47 @@ main {
     border-radius: 15px;
     cursor: pointer;
     margin-top: 10px;
+}
+
+.comments {
+    color: #bebebe;
+    padding: 20px;
+}
+
+.comment-field {
+    width: 400px;
+    height: 200px;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #1c1c1c;
+    font-size: 16px;
+    resize: none;
+}
+
+.comment {
+    background-color: #2a2344;
+    border: none;
+    border-radius: 10px;
+}
+
+.comment-author {
+    position: relative;
+    right: 200px;
+    top: 5px;
+    font-size: 14px;
+}
+
+.comment-date {
+    position: relative;
+    left: 150px;
+    bottom: 25px;
+    font-size: 14px;
+}
+
+.comment-text {
+    position: relative;
+    bottom: 15px
 }
