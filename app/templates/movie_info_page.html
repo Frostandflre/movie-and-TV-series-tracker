@@ -56,6 +56,25 @@
             </p>
         </div>
     </div>
+    <div class="similar-movies-background-container">
+        <h2 class="similar-movies-title">Похожие фильмы</h2>
+        <div class="movie-info-container-row">
+            <div class="scroll-container">
+                <button onclick="ScrollLeft()" class="scroll-button left"><</button>
+                    <div class="similar-movie-container">
+                        {% for movie in similar_movies %}
+                            <div class = "similar-movie">
+                                <a href="{{ url_for('main.movie_info_page', movie_id=movie.id) }}">
+                                    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+                                    <p>{{ movie.title }}</p>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                <button onclick="ScrollRight()" class="scroll-button right">></button>
+            </div>
+        </div>
+    </div>
     <div class = "movie-info-container-row">
         <div class = "movie-info-first-column">
             <div class = "comments">
@@ -116,6 +135,16 @@
                     movie_title: {{ movie_info.title | tojson }}
                 })
             });
+        }
+
+        function ScrollLeft() {
+        let movieWidth = document.querySelector('.similar-movie').offsetWidth;
+        document.querySelector('.similar-movie-container').scrollBy({ left: -(movieWidth * 5)-50, behavior: 'smooth' });
+        }
+
+        function ScrollRight() {
+        let movieWidth = document.querySelector('.similar-movie').offsetWidth;
+        document.querySelector('.similar-movie-container').scrollBy({ left: (movieWidth * 5)+50, behavior: 'smooth' });
         }
 </script>
 {% endblock %}

@@ -3,13 +3,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .forms import RegistrationForm,AuthorizationForm,CommentForm
 from .extensions import database
 from .models import Users, MovieStatus,Comments
-from .movie_logic import get_movie_info,get_popular_movies,search_movie
-from datetime import datetime
+from .movie_logic import get_movie_info, get_popular_movies, search_movie, get_similar_movies
 
 main = Blueprint('main', __name__)
 
 @main.route("/")
-def main_page(): # TODO: исправить проблему с маштабируемостью
+def main_page():
     if not session.get('current_page'):
         session['current_page'] = 1
     nickname = "Guest"
@@ -85,7 +84,7 @@ def registration_page():
     return render_template("registration_page.html",form=form,nickname=nickname)
 
 @main.route("/movie_info/<movie_id>",methods=['GET','POST'])
-def movie_info_page(movie_id):# TODO: исправить ошибку со статусом "Не просмотрено"
+def movie_info_page(movie_id):
     nickname = "Guest"
     if 'nickname' in request.cookies:
         nickname = request.cookies.get('nickname')
@@ -96,6 +95,7 @@ def movie_info_page(movie_id):# TODO: исправить ошибку со ст�
         if database_status :
             current_status = database_status.status
     movie_info = get_movie_info(movie_id)
+    similar_movies = get_similar_movies(movie_id)
     movie_comments = Comments.query.filter_by(movie_id=movie_id).all()
 
     form = CommentForm()
@@ -113,7 +113,7 @@ def movie_info_page(movie_id):# TODO: исправить ошибку со ст�
         database.session.commit()
         return redirect(url_for("main.movie_info_page",movie_id=movie_id))
 
-    return render_template("movie_info_page.html",nickname=nickname,movie_info=movie_info,movie_id=movie_id,current_status=current_status,form=form,movie_comments=movie_comments)
+    return render_template("movie_info_page.html",nickname=nickname,movie_info=movie_info,movie_id=movie_id,current_status=current_status,form=form,movie_comments=movie_comments,similar_movies=similar_movies)
 
 @main.route("/save_movie_status", methods=["POST"])
 def save_movie_status():
@@ -157,7 +157,7 @@ def search_movie_page(term):
     return render_template("search_results_page.html", search_results=search_results,current_page=session['current_page'],term=term)
 
 @main.route("/profile")
-def profile_page():# TODO: доделать дизайн
+def profile_page():
     user_id = request.cookies.get('user_id')
     movie_statuses = [
         ("Всего",MovieStatus.query.filter_by(user_id=user_id).count()),

@@ -5,7 +5,7 @@ tmdb = TMDb()
 tmdb.api_key = Config.TMDb_API
 tmdb.language = 'ru'
 
-def get_movie_info(movie_id): #TODO: что то сделать с тем что TMDb отдаёт мне информацию о фильме на всех языках
+def get_movie_info(movie_id):
     movie = Movie()
     movie_info = movie.details(movie_id)
     if not movie_info:
@@ -20,5 +20,6 @@ def search_movie(term,page = 1):
     movie = Movie()
     return movie.search(term,page = page)
 
-if __name__ == "__main__":
-    print(search_movie("Interception"))
+def get_similar_movies(movie_id):
+    movie = Movie()
+    return movie.similar(movie_id)

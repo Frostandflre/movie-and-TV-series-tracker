@@ -353,6 +353,82 @@ main {
     margin-top: 10px;
 }
 
+.similar-movies-background-container {
+    background-color: #190f40;
+    margin-left: 2.5%;
+    width: 95%;
+    border-radius: 15px;
+}
+.similar-movie-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 10px;
+    padding-bottom: 10px;
+}
+
+.similar-movies-title {
+    font-size: 20px;
+    color: #bebebe;
+    text-align: center;
+    padding: 10px;
+}
+
+.similar-movie-container::-webkit-scrollbar {
+    display: none;
+}
+
+.similar-movie {
+    flex: 0 0 calc(100% / 5 - 10px);
+    text-align: center;
+    white-space: normal;
+}
+
+.similar-movie img {
+    width: 100%;
+    height: 100%;
+    max-width: 180px;
+    max-height: 250px;
+    border-radius: 10px;
+}
+
+.similar-movie a {
+   color: #bebebe;
+   text-decoration: none;
+}
+
+.similar-movie a:hover {
+    color: #5e26bf;
+}
+
+.scroll-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.scroll-button {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 20px;
+    z-index: 10;
+    border-radius: 50%;
+    top: 120px;
+}
+
+.scroll-button.left {
+    left: 0;
+}
+
+.scroll-button.right {
+    right: 0;
+}
+
 .comments {
     color: #bebebe;
     padding: 20px;
