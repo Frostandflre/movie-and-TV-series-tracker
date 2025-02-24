@@ -1,4 +1,4 @@
-from config import Config
+from main_service.config import Config
 from tmdbv3api import TMDb,Movie
 
 tmdb = TMDb()

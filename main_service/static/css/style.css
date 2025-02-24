@@ -126,7 +126,11 @@ main {
     padding: 20px;
     text-align: center;
 }
-
+.flash-message {
+    border-radius: 15px;
+    background-color: #bebebe;
+    width: 300px;
+}
 .alert-error{
     color: red;
 }

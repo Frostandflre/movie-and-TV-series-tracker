@@ -1,5 +1,8 @@
 .idea/
 .venv/
 __pycache__/
-config.py
 /TODO.py
+/main_service/config.py
+/movie_status_service/config.py
+/comments_service/config.py
+/auth_service/config.py

@@ -23,18 +23,24 @@
     <b>cd movie-and-TV-series-tracker</b>
     
     <b>pip install -r requirements.txt</b>
-3. Создайте config.py и настройте строку подключения к базе данных:
+3. Создайте config.py для каждого сервиса и настройте строку подключения к базе данных:
 
     <b>SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@localhost/dbname'</b>
-4. Выполните создание нужных таблиц с помощью команды:
+4. Выполните создание нужных таблиц с помощью команд:
+
+    <b>cd main_service<b/>
 
     <b>flask db upgrade<b/>
-5. Настройте TMDb API в config.py
+5. Настройте TMDb API в main_service/config.py
 
 6. Запустите приложение 
 
 ### Примечание
 * Замените <b>username</b>, <b>password</b> и <b>dbname</b> на данные вашей базы.
 * Убедитесь, что PostgreSQL или другая СУБД установлены и запущены.
-* Пользователям из России нужен dns сервер (9.9.9.9) для подключения к TMDB
+* Пользователям из России для подключения к TMDB нужно поставить:
+
+   предпочтительный DNS-сервер: 64.6.64.6
+
+   дополнительный DNS-сервер: 64.6.65.6
 

@@ -3,6 +3,17 @@
 {% block title %}{{movie_info.title}}{% endblock %}
 
 {% block content %}
+<div class="flash-message">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+</div>
 <div class = "movie-info-container">
     <div class = "movie-info-container-row">
         <div class = "movie-info-first-column">
@@ -82,9 +93,9 @@
                 {% if movie_comments %}
                     {% for comment in movie_comments %}
                         <div class="comment">
-                            <p class="comment-author">Автор: {{ comment.author_nickname }}</p>
-                            <p class="comment-date">Дата: {{ comment.publication_date }}</p>
-                            <p class="comment-text">{{ comment.text }}</p>
+                            <p class="comment-author">Автор: {{ comment['author_nickname'] }}</p>
+                            <p class="comment-date">Дата: {{ comment['publication_date'] }}</p>
+                            <p class="comment-text">{{ comment['text'] }}</p>
                         </div>
                     {% endfor %}
                 {% else %}
