@@ -3,17 +3,6 @@
 {% block title %}{{movie_info.title}}{% endblock %}
 
 {% block content %}
-<div class="flash-message">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-</div>
 <div class = "movie-info-container">
     <div class = "movie-info-container-row">
         <div class = "movie-info-first-column">
@@ -96,6 +85,8 @@
                             <p class="comment-author">Автор: {{ comment['author_nickname'] }}</p>
                             <p class="comment-date">Дата: {{ comment['publication_date'] }}</p>
                             <p class="comment-text">{{ comment['text'] }}</p>
+                            <button class="comment-button dislike" onclick="DislikeComment({{ comment['id'] }})" data-comment-id="{{ comment.id }}">↓</button>
+                            <button class="comment-button like" onclick="LikeComment({{ comment['id'] }})" data-comment-id="{{ comment.id }}">↑</button>
                         </div>
                     {% endfor %}
                 {% else %}
@@ -115,6 +106,72 @@
 </div>
 
 <script>
+        function LikeComment(comment_id) {
+
+            var like_button = document.querySelector(`.comment-button.like[data-comment-id="${comment_id}"]`);
+            var dislike_button = document.querySelector(`.comment-button.dislike[data-comment-id="${comment_id}"]`);
+
+            fetch("/like_comment", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                "movie_id": {{ movie_id | tojson | safe }},
+                "comment_id": comment_id
+                })
+            })
+            .then(response => {
+                if ([401, 400, 500].includes(response.status)) {
+                    window.location.reload();
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+
+            like_button.disabled = true;
+            like_button.style.backgroundColor = "#4CAF50";
+            like_button.style.cursor = "not-allowed";
+            dislike_button.disabled = false;
+            dislike_button.style.backgroundColor = "#BEBEBE";
+            dislike_button.style.cursor = "pointer";
+            })
+        }
+
+        function DislikeComment(comment_id) {
+
+            var like_button = document.querySelector(`.comment-button.like[data-comment-id="${comment_id}"]`);
+            var dislike_button = document.querySelector(`.comment-button.dislike[data-comment-id="${comment_id}"]`);
+
+            fetch("/dislike_comment", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                "movie_id": {{ movie_id | tojson | safe }},
+                "comment_id": comment_id
+                })
+            })
+            .then(response => {
+                if ([401, 400, 500].includes(response.status)) {
+                    window.location.reload();
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+
+            dislike_button.disabled = true;
+            dislike_button.style.backgroundColor = "#EB3E1C";
+            dislike_button.style.cursor = "not-allowed";
+            like_button.disabled = false;
+            like_button.style.backgroundColor = "#BEBEBE";
+            like_button.style.cursor = "pointer";
+            })
+        }
+
         function ToggleDropdown() {
             var content = document.getElementById("dropdown-content");
             content.style.display = content.style.display === "block" ? "none" : "block";
@@ -145,6 +202,13 @@
                     movie_id: {{ movie_id | tojson }},
                     movie_title: {{ movie_info.title | tojson }}
                 })
+            })
+            .then(response => {
+                if ([401, 400, 500].includes(response.status)) {
+                    window.location.reload();
+                } else {
+                    return response.json();
+                }
             });
         }
 

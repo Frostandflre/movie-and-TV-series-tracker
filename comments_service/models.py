@@ -24,3 +24,20 @@ class Comments(database.Model):
             'dislikes': self.dislikes,
             'publication_time': self.publication_time.isoformat()
         }
+
+class CommentReaction(database.Model):
+    __tablename__ = 'commentreaction'
+    __table_args__ = {'schema': 'comments_schema'}
+
+    id = database.Column(database.Integer, primary_key=True)
+    user_id = database.Column(database.Integer, nullable=False)
+    comment_id = database.Column(database.Integer, nullable=False)
+    reaction_type = database.Column(database.String(10), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'comment_id': self.comment_id,
+            'reaction_type': self.reaction_type,
+        }

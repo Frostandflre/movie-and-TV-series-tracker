@@ -179,18 +179,70 @@ def save_movie_status():
 
     if save_status_response.status_code == 401:
         flash("Пользователь не авторизован", "error")
-        return jsonify({"error": "Пользователь не авторизован"}), 401
+        return redirect(url_for("main.movie_info_page",movie_id=status_data["movie_id"]))
 
     if save_status_response.status_code == 400:
         flash("Некорректные данные", "error")
-        return jsonify({"error": "Некорректные данные"}), 400
+        return redirect(url_for("main.movie_info_page",movie_id=status_data["movie_id"]))
 
     if save_status_response.status_code!= 200:
         flash("Ошибка сохранения статуса просмотра. Попробуйте позже.", "error")
-        return jsonify({"error": "Ошибка сохранения статуса просмотра"}), 500
+        return redirect(url_for("main.movie_info_page",movie_id=status_data["movie_id"]))
 
 
     return jsonify({"message": "Новый статус установлен"}),200
+
+@main.route("/like_comment",methods=["PATCH"])
+def like_comment():
+    data = request.get_json()
+
+    comment_data = {
+    "comment_id": data.get("comment_id"),
+    "movie_id": data.get("movie_id"),
+    "user_id": request.cookies.get('user_id')
+    }
+
+    like_comment_response = requests.patch(f"{API_GATEWAY_URL}/like_comment", json=comment_data)
+
+    if like_comment_response.status_code == 401:
+        flash("Пользователь не авторизован", "error")
+        return jsonify({"message": "Пользователь не авторизован"}),401
+
+    if like_comment_response.status_code == 400:
+        flash("Некорректные данные", "error")
+        return jsonify({"message": "Некорректные данные"}), 400
+
+    if like_comment_response.status_code!= 200:
+        flash("Ошибка постановки лайка. Попробуйте позже.", "error")
+        return jsonify({"Ошибка постановки лайка. Попробуйте позже."}), 500
+
+    return jsonify({"message": "Лайк поставлен"}),200
+
+@main.route("/dislike_comment",methods=["PATCH"])
+def dislike_comment():
+    data = request.get_json()
+
+    comment_data = {
+    "comment_id": data.get("comment_id"),
+    "movie_id": data.get("movie_id"),
+    "user_id": request.cookies.get('user_id')
+    }
+
+    dislike_comment_response = requests.patch(f"{API_GATEWAY_URL}/dislike_comment", json=comment_data)
+
+    if dislike_comment_response.status_code == 401:
+        flash("Пользователь не авторизован", "error")
+        return jsonify({"message": "Пользователь не авторизован"}),401
+
+    if dislike_comment_response.status_code == 400:
+        flash("Некорректные данные", "error")
+        return jsonify({"message": "Некорректные данные"}),400
+
+    if dislike_comment_response.status_code!= 200:
+        flash("Ошибка постановки дизлайка. Попробуйте позже.", "error")
+        return jsonify({"message": "Ошибка постановки дизлайка. Попробуйте позже."}),500
+
+    return jsonify({"message": "Дизлайк поставлен"}),200
 
 @main.route("/search/<term>")
 def search_movie_page(term):

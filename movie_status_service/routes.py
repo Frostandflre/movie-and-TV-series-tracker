@@ -15,11 +15,14 @@ def get_movie_status():
     if not user_id:
         return jsonify({"error": "Пользователь не авторизован"}), 401
 
-    status = MovieStatus.query.filter_by(user_id=user_id,movie_id=movie_id).first()
+    status_obj = MovieStatus.query.filter_by(user_id=user_id,movie_id=movie_id).first()
 
-    if status is None:status = "Не просмотрено"
+    if status_obj is None:
+        status = "Не просмотрено"
+    else:
+        status = status_obj.status
 
-    return jsonify({"message": "Статус получен","status":status.to_dict()["status"]}),200
+    return jsonify({"message": "Статус получен","status":status}),200
 
 
 @movie_status_bp.route("/save_movie_status", methods=["POST"])

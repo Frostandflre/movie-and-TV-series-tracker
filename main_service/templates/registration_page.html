@@ -6,17 +6,6 @@
 <div class="form">
     <h2>Введите ваши данные:</h2>
     <form method="POST" >
-        <div class="flash-message">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="alert alert-{{ category }}">
-                    {{ message }}
-                  </div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-        </div>
 
         {{  form.hidden_tag() }}
 

@@ -29,6 +29,16 @@ def get_comments():
     response = requests.get(f"{COMMENTS_SERVICE_URL}/get_comments",params={"movie_id":movie_id})
     return jsonify(response.json()), response.status_code
 
+@gateway_bp.route("/like_comment", methods=["PATCH"])
+def like_comment():
+    response = requests.patch(f"{COMMENTS_SERVICE_URL}/like_comment", json=request.json)
+    return jsonify(response.json()), response.status_code
+
+@gateway_bp.route("/dislike_comment", methods=["PATCH"])
+def dislike_comment():
+    response = requests.patch(f"{COMMENTS_SERVICE_URL}/dislike_comment", json=request.json)
+    return jsonify(response.json()), response.status_code
+
 @gateway_bp.route("/get_movie_status", methods=["GET"])
 def get_movie_status():
     movie_id = request.args.get("movie_id")

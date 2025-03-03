@@ -25,4 +25,4 @@ def login():
 
     if not user or not check_password_hash(user.password, data['password']):
         return jsonify({"error": "Неправильный логин или пароль"}), 400
-    return jsonify({"message": "Вход выполнен"," user_id": user.user_id, "nickname": user.nickname}),200
+    return jsonify({"message": "Вход выполнен","user_id": user.user_id, "nickname": user.nickname}),200

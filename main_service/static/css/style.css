@@ -127,9 +127,17 @@ main {
     text-align: center;
 }
 .flash-message {
-    border-radius: 15px;
+    position: relative;
+    max-width: 30%;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: #bebebe;
-    width: 300px;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    margin-bottom: 20px;
 }
 .alert-error{
     color: red;
@@ -459,7 +467,7 @@ main {
 
 .comment-author {
     position: relative;
-    right: 200px;
+    right: 190px;
     top: 5px;
     font-size: 14px;
 }
@@ -474,4 +482,23 @@ main {
 .comment-text {
     position: relative;
     bottom: 15px
+}
+
+.comment-button {
+    position: relative;
+    background-color: #bebebe;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    bottom: 10px;
+    left: 150px;
+}
+
+.comment-button.dislike {
+    color: #ff6347;
+}
+
+.comment-button.like {
+    color: #168d17;
 }
